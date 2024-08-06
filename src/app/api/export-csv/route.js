@@ -1,21 +1,15 @@
 import { NextResponse } from "next/server";
-import { Pool } from "pg";
+import pool from "@/lib/db";
 import { Parser } from "json2csv";
 
-// Database connection parameters
-const pool = new Pool({
-  user: "your_db_user",
-  host: "your_db_host",
-  database: "your_db_name",
-  password: "your_db_password",
-  port: 5432, // Default PostgreSQL port
-});
+const schema = process.env.POSTGRESQL_SCHEMA;
+const tableName = process.env.POSTGRESQL_TABLE_NAME;
 
 export async function GET() {
   try {
     const client = await pool.connect();
 
-    const result = await client.query("SELECT * FROM your_table_name");
+    const result = await client.query(`SELECT * FROM ${schema}.${tableName}`);
     const data = result.rows;
 
     client.release();
@@ -28,7 +22,7 @@ export async function GET() {
     return new NextResponse(csv, {
       headers: {
         "Content-Type": "text/csv",
-        "Content-Disposition": "attachment; filename=table_data.csv",
+        "Content-Disposition": `attachment; filename=${tableName}_data.csv`,
       },
     });
   } catch (error) {

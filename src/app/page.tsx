@@ -1,16 +1,18 @@
-import Link from "next/link";
+import { DownloadXLSX } from "@/components/downloadXLSX";
+import { DownloadCSV } from "@/components/downloadCSV";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <main className="w-full text-center">
       <div className="flex flex-col gap-3">
-        <h1>Export Table Data as CSV</h1>
-        <div className="mx-auto">
-          <Link href="/api/export-csv">
-            <div className="bg-slate-500 w-fit py-2 px-4 rounded-md">
-              Download CSV
-            </div>
-          </Link>
+        <h1>
+          Export data of table:{" "}
+          <span className="">{process.env.POSTGRESQL_TABLE_NAME}</span>
+        </h1>
+        <div className="mx-auto flex gap-2">
+          <DownloadXLSX />
+          <DownloadCSV />
         </div>
       </div>
     </main>
